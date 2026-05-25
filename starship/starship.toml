@@ -1,5 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# Bump from default 500ms — slow Python interpreters (Downloads/quarantined
+# dirs, first-warmup venvs) can take >500ms to report their version.
+command_timeout = 2000
+
 # Two-line prompt: info on top, character below for fast typing
 format = """
 $os\

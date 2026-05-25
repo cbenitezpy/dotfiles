@@ -33,16 +33,15 @@ python3 install.py
 
 ## Dependencias (Homebrew)
 
-```bash
-brew install \
-  zsh starship zoxide atuin carapace fzf \
-  eza bat fd ripgrep bottom gping \
-  neovim uv \
-  awscli kubectl helm
+Todo está declarado en el `Brewfile` del repo. Después de clonar:
 
-# Nerd Font usado en iTerm2 (JetBrainsMono parcheada con iconos)
-brew install --cask font-jetbrains-mono-nerd-font
+```bash
+cd ~/.dotfiles && brew bundle install
 ```
+
+Instala: zsh, starship, zoxide, atuin, carapace, fzf, eza, bat, fd, ripgrep, bottom, gping, neovim, uv, awscli, kubectl, helm, kubectx, stern, k9s, y el font JetBrainsMono Nerd Font (cask).
+
+Para chequear qué falta o sobra: `brew bundle check` / `brew bundle cleanup`.
 
 Plus:
 ```bash
