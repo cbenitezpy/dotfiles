@@ -33,6 +33,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 # --- Completion (must run before plugins that use compdef) ---
 autoload -Uz compinit && compinit
+zmodload zsh/complist   # required for `menuselect` keymap below
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 zstyle ':completion:*' menu select
 zstyle ':completion:*:descriptions' format '[%d]'
