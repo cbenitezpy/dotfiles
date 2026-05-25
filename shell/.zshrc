@@ -32,7 +32,9 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 source "${ZINIT_HOME}/zinit.zsh"
 
 # --- Completion (must run before plugins that use compdef) ---
-autoload -Uz compinit && compinit
+# -C skips the .zcompdump security check (already validated daily by zicompinit
+# in the turbo block below). ~10x faster than plain `compinit`.
+autoload -Uz compinit && compinit -C
 zmodload zsh/complist   # required for `menuselect` keymap below
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 zstyle ':completion:*' menu select
@@ -90,7 +92,13 @@ zinit wait'1' lucid as'null' atload'source <(carapace _carapace)' for \
 # Tool initializations
 # ============================================================
 eval "$(starship init zsh)"     # Prompt
-eval "$(uv generate-shell-completion zsh)" 2>/dev/null
+
+# uv shell completion — cached in ~/.zfunc/_uv (regenerate manually if uv updates)
+if command -v uv &>/dev/null; then
+  [[ -d "$HOME/.zfunc" ]] || mkdir -p "$HOME/.zfunc"
+  fpath=("$HOME/.zfunc" $fpath)
+  [[ -f "$HOME/.zfunc/_uv" ]] || uv generate-shell-completion zsh > "$HOME/.zfunc/_uv" 2>/dev/null
+fi
 
 # --- Atuin (history search, customized bindings to not conflict with tmux Ctrl-B) ---
 if command -v atuin &> /dev/null; then
@@ -141,7 +149,10 @@ alias hup='helm upgrade'
 # AWS CLI completion + fzf profile picker
 # ============================================================
 autoload -Uz bashcompinit && bashcompinit
-complete -C "$(command -v aws_completer 2>/dev/null || echo /opt/homebrew/bin/aws_completer)" aws
+# Portable across Intel (/usr/local) and Apple Silicon (/opt/homebrew) Macs
+_aws_comp=$(command -v aws_completer 2>/dev/null)
+[[ -n "$_aws_comp" ]] && complete -C "$_aws_comp" aws
+unset _aws_comp
 
 awsp() {
   local profile
@@ -158,7 +169,7 @@ awsp-clear() { unset AWS_PROFILE; echo "AWS_PROFILE cleared"; }
 # ============================================================
 autoload -Uz add-zsh-hook
 _auto_venv() {
-  if [[ -f "$PWD/.venv/bin/activate" ]]; then
+  if [[ -r "$PWD/.venv/bin/activate" ]]; then
     if [[ "$VIRTUAL_ENV" != "$PWD/.venv" ]]; then
       source "$PWD/.venv/bin/activate"
     fi
