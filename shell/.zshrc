@@ -82,11 +82,12 @@ zinit wait lucid light-mode for \
 # OMZ kubectl plugin (aliases: kgp, kgs, kgn, kgd, kdp, kds, kdd, kl, kx, kaf, kdf, etc.)
 zinit wait lucid for OMZP::kubectl
 
-# Carapace (universal completions)
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
-export CARAPACE_LENIENT=false
-zinit wait'1' lucid as'null' atload'source <(carapace _carapace)' for \
-  zdharma-continuum/null
+if command -v carapace &>/dev/null; then
+  export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+  export CARAPACE_LENIENT=false
+  zinit wait'1' lucid as'null' atload'source <(carapace _carapace)' for \
+    zdharma-continuum/null
+fi
 
 # ============================================================
 # Tool initializations

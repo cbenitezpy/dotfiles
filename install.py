@@ -33,8 +33,10 @@ LINKS = {
     "zed/settings.json": ".config/zed/settings.json",
     # Neovim (whole directory symlink — LazyVim config)
     "nvim": ".config/nvim",
-    # SDKMAN
-    "dev/.sdkmanrc": ".sdkmanrc",
+    # SDKMAN — NOT symlinked by default: a global ~/.sdkmanrc with a pinned
+    # Java version makes SDKMAN auto-env trigger on every shell load in $HOME.
+    # If you want it on a specific machine, run manually:
+    #   ln -s ~/.dotfiles/dev/.sdkmanrc ~/.sdkmanrc
     # Claude Code
     "claude/CLAUDE.md": ".claude/CLAUDE.md",
     "claude/mcp.json": ".claude/mcp.json",
