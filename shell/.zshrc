@@ -1,206 +1,228 @@
-# Kiro CLI pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+# ============================================================
+# ~/.zshrc — Zinit + Vi mode + LazyVim + uv + tooling moderno
+# ============================================================
 
-# UTF-8 Locale (necesario para Nerd Fonts/Unicode en Starship)
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && \
+  builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
+# --- Locale & Editor ---
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
+export EDITOR='nvim'
+export VISUAL='nvim'
+export _ZO_DOCTOR=0   # zinit's deferred plugins confuse zoxide's doctor heuristic
 
-# Path configuration
-export PATH="/opt/homebrew/bin:$HOME/.cargo/bin:$PATH"
+# --- PATH ---
+export PATH="/opt/homebrew/bin:$HOME/.cargo/bin:$HOME/.antigravity/antigravity/bin:$PATH"
 
-# Load environment variables
-if [[ -f ~/.env ]]; then
-    source ~/.env
-fi
+# --- Load private env vars ---
+[[ -f ~/.env ]] && source ~/.env
+[[ -f "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
 
-# Oh My Zsh configuration
-export ZSH="$HOME/.oh-my-zsh"
+# --- Kubernetes config (chocolandia) ---
+export KUBECONFIG="$HOME/chocolandia_kube/terraform/environments/chocolandiadc-mvp/kubeconfig"
 
-# Disable Powerlevel10k theme
-ZSH_THEME=""
+# ============================================================
+# Zinit bootstrap
+# ============================================================
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d "$ZINIT_HOME/.git" ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
-# Plugins
-plugins=(
-  git
-  node
-  npm
-  python
-  pip
-  tmux
-  docker
-  docker-compose
-  kubectl
-  helm
-  extract
-  z
-  sudo
-  colorize
-  copypath
-  copyfile
-  web-search
-  aws
-  terraform
-)
+# --- Completion (must run before plugins that use compdef) ---
+autoload -Uz compinit && compinit
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+zstyle ':completion:*' menu select
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-max 50
+zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
+# Priorize commands over files in tab completion
+zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:commands' rehash 1
+zstyle ':completion:*' tag-order 'commands functions aliases builtins reserved-words' 'local-directories directories' files
+zstyle ':completion:*:git:*' tag-order 'common-commands'
+# Arrow navigation inside completion menu
+bindkey -M menuselect '^[[A' up-line-or-history
+bindkey -M menuselect '^[[B' down-line-or-history
+bindkey -M menuselect '^[[C' forward-char
+bindkey -M menuselect '^[[D' backward-char
+bindkey -M menuselect '^M' .accept-line
 
-# Load Oh My Zsh (if installed)
-if [[ -f $ZSH/oh-my-zsh.sh ]]; then
-    source $ZSH/oh-my-zsh.sh
-fi
+# ============================================================
+# Vi mode
+# ============================================================
+bindkey -v
+export KEYTIMEOUT=1   # snappy mode switch
+# `v` in normal mode → edit current command in $EDITOR (nvim)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd 'v' edit-command-line
+# Familiar bindings even in vi-insert mode
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
 
-# SDKMAN configuration
-export SDKMAN_DIR="$HOME/.sdkman"
-if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
+# ============================================================
+# Zinit plugins (turbo mode = async-after-prompt)
+# ============================================================
+# Syntax highlighting + autosuggestions + completions, todo async
+zinit wait lucid light-mode for \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+  atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+  blockf atpull'zinit creinstall -q .' \
+    zsh-users/zsh-completions
 
-# Carapace completions configuration (después de Oh My Zsh)
-if command -v carapace >/dev/null 2>&1; then
-    export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
-    export CARAPACE_LENIENT=false
+# OMZ kubectl plugin (aliases: kgp, kgs, kgn, kgd, kdp, kds, kdd, kl, kx, kaf, kdf, etc.)
+zinit wait lucid for OMZP::kubectl
 
-    # Configuración de zsh completion con límite de 50 opciones
-    zstyle ':completion:*' list-max 50
-    zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
-    zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+# Carapace (universal completions)
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+export CARAPACE_LENIENT=false
+zinit wait'1' lucid as'null' atload'source <(carapace _carapace)' for \
+  zdharma-continuum/null
 
-    # PRIORIZAR COMANDOS SOBRE ARCHIVOS
-    zstyle ':completion:*' completer _complete _ignored _approximate
-    zstyle ':completion:*' group-name ''
-    zstyle ':completion:*:descriptions' format '%B%d%b'
-    zstyle ':completion:*:commands' rehash 1
+# ============================================================
+# Tool initializations
+# ============================================================
+eval "$(starship init zsh)"     # Prompt
+eval "$(uv generate-shell-completion zsh)" 2>/dev/null
 
-    # Orden de completado: comandos primero, luego archivos
-    zstyle ':completion:*' tag-order 'commands functions aliases builtins reserved-words' 'local-directories directories' files
-
-    # Para git específicamente, priorizar subcomandos
-    zstyle ':completion:*:git:*' tag-order 'common-commands'
-
-    # Configuración para navegación con flechas
-    zstyle ':completion:*' menu select
-    zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
-
-    # Mostrar menú automáticamente sin preguntar
-    zstyle ':completion:*' menu select=long
-    zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
-
-    # No preguntar si hay muchas opciones, mostrar directamente
-    LISTMAX=0
-
-    # Habilitar navegación con flechas en el menú
-    bindkey -M menuselect '^[[A' up-line-or-history      # Flecha arriba
-    bindkey -M menuselect '^[[B' down-line-or-history    # Flecha abajo
-    bindkey -M menuselect '^[[C' forward-char            # Flecha derecha
-    bindkey -M menuselect '^[[D' backward-char           # Flecha izquierda
-    bindkey -M menuselect '^M' .accept-line              # Enter para aceptar
-
-    source <(carapace _carapace)
-fi
-
-# Lazy load NVM for performance
-export NVM_DIR="$HOME/.nvm"
-nvm() {
-  unset -f nvm node npm npx
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # Load nvm
-  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # Load nvm bash_completion
-  nvm "$@"
-}
-node() {
-  nvm
-  node "$@"
-}
-npm() {
-  nvm
-  npm "$@"
-}
-npx() {
-  nvm
-  npx "$@"
-}
-
-# Atuin configuration
-. "$HOME/.atuin/bin/env"
-
+# --- Atuin (history search, customized bindings to not conflict with tmux Ctrl-B) ---
 if command -v atuin &> /dev/null; then
-    # Inicializar sin bindings por defecto
-    eval "$(atuin init zsh --disable-ctrl-r --disable-up-arrow)"
-
-    # Configurar teclas que no conflicten con tmux:
-    # Ctrl+F para búsqueda (en lugar de Ctrl+R)
-    bindkey '^F' _atuin_search_widget
-
-    # Ctrl+G para búsqueda en directorio actual
-    bindkey '^G' _atuin_search_directory_widget
-
-    # Widget personalizado para búsqueda por directorio
-    _atuin_search_directory_widget() {
-        emulate -L zsh
-        zle -I
-        local selected=$(atuin search --interactive --filter-mode directory)
-        if [[ -n $selected ]]; then
-            BUFFER=$selected
-            zle end-of-line
-        fi
-        zle reset-prompt
-    }
-    zle -N _atuin_search_directory_widget
+  eval "$(atuin init zsh --disable-ctrl-r --disable-up-arrow)"
+  # Up-arrow keeps atuin search in both vi modes
+  bindkey -M viins '^[[A' atuin-up-search
+  bindkey -M vicmd '^[[A' atuin-up-search
+  # Ctrl-F: full atuin search (Ctrl-R conflicts with tmux for some)
+  bindkey '^F' _atuin_search_widget
+  # Ctrl-G: directory-scoped atuin search
+  _atuin_search_directory_widget() {
+    emulate -L zsh
+    zle -I
+    local selected=$(atuin search --interactive --filter-mode directory)
+    if [[ -n $selected ]]; then
+      BUFFER=$selected
+      zle end-of-line
+    fi
+    zle reset-prompt
+  }
+  zle -N _atuin_search_directory_widget
+  bindkey '^G' _atuin_search_directory_widget
 fi
 
-# Aliases
-alias claude="/Users/cbenitez/.claude/local/claude"
-alias ls='lsd'
-alias cat='bat'
+# --- FZF ---
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Local bin environment
-. "$HOME/.local/bin/env"
+# ============================================================
+# Kubectl / Helm / k8s tooling
+# ============================================================
+alias k=kubectl
+[ -f "$(command -v kubectl)" ] && source <(kubectl completion zsh) && compdef __start_kubectl k
 
-# Starship prompt (must be at the end)
-if command -v starship >/dev/null 2>&1; then
-    eval "$(starship init zsh)"
-fi
-# Docker CLI completions
-fpath=(/Users/cbenitez/.docker/completions $fpath)
-
-#kubernetes
-export KUBECONFIG=/Users/cbenitez/chocolandia_kube/terraform/environments/chocolandiadc-mvp/kubeconfig
-
-# Kubectl autocompletion
-if command -v kubectl >/dev/null 2>&1; then
-    source <(kubectl completion zsh)
-fi
-
-# Kubernetes aliases
-alias k='kubectl'
-alias kgp='kubectl get pods'
-alias kgs='kubectl get services'
-alias kgn='kubectl get nodes'
-alias kgd='kubectl get deployments'
-alias kdp='kubectl describe pod'
-alias kds='kubectl describe service'
-alias kdd='kubectl describe deployment'
-alias kl='kubectl logs'
-alias kx='kubectl exec -it'
-alias kaf='kubectl apply -f'
-alias kdf='kubectl delete -f'
-
-# kubectx/kubens aliases
+# Extra k8s aliases not provided by OMZP::kubectl
 alias kctx='kubectx'
 alias kns='kubens'
+alias ks='stern'                 # mejores logs multi-pod
+alias k9='k9s'
 
-# Stern (logs mejorados)
-alias ks='stern'
-
-# Helm aliases
+# Helm
 alias h='helm'
 alias hls='helm list'
 alias hin='helm install'
 alias hun='helm uninstall'
 alias hup='helm upgrade'
 
-# K9s
-alias k9='k9s'
+# ============================================================
+# AWS CLI completion + fzf profile picker
+# ============================================================
+autoload -Uz bashcompinit && bashcompinit
+complete -C "$(command -v aws_completer 2>/dev/null || echo /opt/homebrew/bin/aws_completer)" aws
 
-# Added by Antigravity
-export PATH="/Users/cbenitez/.antigravity/antigravity/bin:$PATH"
+awsp() {
+  local profile
+  profile=$(aws configure list-profiles 2>/dev/null | fzf --prompt="AWS profile> " --height=40% --reverse) || return
+  if [[ -n "$profile" ]]; then
+    export AWS_PROFILE="$profile"
+    echo "AWS_PROFILE=$profile"
+  fi
+}
+awsp-clear() { unset AWS_PROFILE; echo "AWS_PROFILE cleared"; }
+
+# ============================================================
+# Python venv auto-activation (chpwd hook, no plugin needed)
+# ============================================================
+autoload -Uz add-zsh-hook
+_auto_venv() {
+  if [[ -f "$PWD/.venv/bin/activate" ]]; then
+    if [[ "$VIRTUAL_ENV" != "$PWD/.venv" ]]; then
+      source "$PWD/.venv/bin/activate"
+    fi
+  elif [[ -n "$VIRTUAL_ENV" ]]; then
+    local venv_root="$(dirname "$VIRTUAL_ENV")"
+    if [[ "$PWD" != "$venv_root"* ]]; then
+      deactivate 2>/dev/null
+    fi
+  fi
+}
+add-zsh-hook chpwd _auto_venv
+_auto_venv  # run once for initial directory
+
+# ============================================================
+# Lazy load NVM (for occasional Node.js work)
+# ============================================================
+export NVM_DIR="$HOME/.nvm"
+nvm() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+node() { nvm; node "$@"; }
+npm() { nvm; npm "$@"; }
+npx() { nvm; npx "$@"; }
+
+# ============================================================
+# SDKMAN (Java)
+# ============================================================
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# ============================================================
+# Docker
+# ============================================================
+fpath=("$HOME/.docker/completions" $fpath)
+
+# ============================================================
+# Aliases — Modern CLI replacements
+# ============================================================
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -lh --icons --grid'
+alias la='eza -lah --icons --grid'
+alias tree='eza --tree --icons'
+alias cat='bat --style=plain'
+alias g='git'
+alias zi='z -i'
+alias top='btm'
+alias ping='gping'
+alias find='fd'
+
+# Claude Code (local install)
+alias claude="$HOME/.claude/local/claude"
+
+# ============================================================
+# iTerm2 shell integration
+# ============================================================
+[[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# ============================================================
+# zoxide must be initialized last (per zoxide doctor)
+# ============================================================
+eval "$(zoxide init zsh)"
 
 # Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && \
+  builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"

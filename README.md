@@ -1,91 +1,139 @@
-# 🖥️ Dotfiles
+# Dotfiles
 
-Configuraciones de terminal para macOS optimizadas para desarrollo y SRE.
+Configuración personal de terminal para macOS — orientada a SRE, Kubernetes, AWS, Python.
 
-## ✨ Características
+## Stack
 
-- **Zsh** con Oh My Zsh y Starship prompt (tema Tomorrow Night Bright)
-- **Tmux** para gestión de sesiones
-- **Lazy loading** de NVM y SDKMAN para inicio rápido
-- **Herramientas modernas**: `lsd`, `bat`, `atuin`, `btop`
-- **Claude Code** MCP servers configurados
-- **Carapace** para autocompletado avanzado
+| Capa | Herramienta |
+|------|-------------|
+| Shell | **zsh** con **Vi mode** (`v` abre comando en `$EDITOR`) |
+| Plugin manager | **Zinit** (turbo mode async post-prompt) |
+| Prompt | **Starship** con prompt de dos líneas y módulos contextuales |
+| History | **Atuin** (Ctrl-F búsqueda global, Ctrl-G por directorio) |
+| Dir nav | **Zoxide** (`z`, `zi`) |
+| Completions | **Carapace** (universal) + `OMZP::kubectl` |
+| Editor | **Neovim** + **LazyVim** (python / yaml / helm / terraform / docker / markdown) |
+| Python | **uv** + auto-activación de `.venv` vía hook `chpwd` |
+| Files | `eza` (ls), `bat` (cat), `fd` (find), `rg` (grep) |
+| System | `btm` (top), `gping` (ping), `fzf` (search) |
+| Kubernetes | `kubectl` + alias `k`, `kctx`, `kns`, `ks` (stern), `k9` (k9s) |
+| AWS | `aws` CLI + función `awsp` (fzf profile picker) |
+| Java | SDKMAN (lazy) |
+| Node | NVM (lazy) |
 
-## 📦 Instalación
+## Instalación
 
 ```bash
-git clone https://github.com/cbenitezpy-ueno/dotfiles.git ~/.dotfiles
+git clone https://github.com/cbenitezpy/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 python3 install.py
 ```
 
-## 🗂️ Contenido
+`install.py` crea symlinks desde `~/.dotfiles/*` hacia las ubicaciones reales en home, haciendo backup de cualquier archivo previo a `*.pre-dotfiles`.
 
-```
-~/.dotfiles/
-├── shell/          # .zshrc, .zprofile, .bashrc, .bash_profile, .profile
-├── git/            # .gitconfig, .gitignore_global
-├── tmux/           # .tmux.conf
-├── starship/       # starship.toml (Tomorrow Night Bright theme)
-├── gh/             # GitHub CLI config
-├── atuin/          # Shell history sync
-├── btop/           # System monitor
-├── lsd/            # ls replacement
-├── zed/            # Zed editor settings
-├── claude/         # Claude Code config (MCP template)
-├── dev/            # .sdkmanrc
-└── install.py      # Script de instalación
-```
-
-## 🔧 Dependencias
+## Dependencias (Homebrew)
 
 ```bash
-# Homebrew packages
-brew install starship lsd bat atuin btop zoxide carapace
+brew install \
+  zsh starship zoxide atuin carapace fzf \
+  eza bat fd ripgrep bottom gping \
+  neovim uv \
+  awscli kubectl helm
+```
 
-# Oh My Zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+Plus:
+```bash
+# Zinit (plugin manager)
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 # SDKMAN (Java)
 curl -s "https://get.sdkman.io" | bash
 
-# NVM (Node.js)
+# NVM (Node)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 ```
 
-## ⚙️ Post-instalación
+## Post-instalación
 
-1. **GitHub CLI** - Autenticarse:
-   ```bash
-   gh auth login
-   ```
-
-2. **Claude Code MCP** - Copiar template y agregar token:
+1. **Neovim** — al abrir `nvim` por primera vez, LazyVim instala plugins + Mason instala LSPs/formatters (Pyright, Ruff, yaml-language-server, helm-ls, terraform-ls, etc.).
+2. **GitHub CLI** — `gh auth login`
+3. **Atuin** — `atuin login` para sincronizar history entre máquinas
+4. **Claude Code MCP** — copiar template y completar token:
    ```bash
    cp ~/.dotfiles/claude/mcp.json.template ~/.claude/mcp.json
-   # Editar y agregar tu GitHub PAT
    ```
 
-3. **Atuin** - Sincronizar historial:
-   ```bash
-   atuin login
-   ```
+## Contenido del repo
 
-## 🎨 Theme
-
-Starship configurado con paleta **Tomorrow Night Bright**:
-- Prompt minimalista con info de Git, AWS, y duración de comandos
-- Java deshabilitado (SDKMAN es lento para detección)
-- Timeout extendido para comandos pesados
-
-## 📝 Aliases incluidos
-
-```bash
-alias ls='lsd'
-alias cat='bat'
-alias claude="/Users/$USER/.claude/local/claude"
+```
+~/.dotfiles/
+├── shell/         # .zshrc, .zprofile, .bashrc, ...
+├── starship/      # starship.toml (2-line prompt + Nerd Font icons)
+├── nvim/          # LazyVim config (init.lua + lua/ + lazy-lock.json)
+├── git/           # .gitconfig, .gitignore_global
+├── tmux/          # .tmux.conf
+├── atuin/         # config.toml (history sync)
+├── gh/            # GitHub CLI config
+├── zed/           # Zed editor settings
+├── claude/        # Claude Code CLAUDE.md, settings.json, mcp.json.template
+├── dev/           # .sdkmanrc
+├── install.py     # symlink installer
+└── README.md
 ```
 
----
+## Keybindings notables
 
-*Gestionado con symlinks desde `~/.dotfiles`*
+| Key | Modo | Acción |
+|-----|------|--------|
+| `Esc` | insert | Entra a vi-normal mode |
+| `v` | vi-normal | Edita comando actual en `$EDITOR` (nvim) |
+| `Up Arrow` | ambos | Búsqueda Atuin |
+| `Ctrl-F` | insert | Búsqueda Atuin full-screen |
+| `Ctrl-G` | insert | Búsqueda Atuin scoped al directorio actual |
+| `Ctrl-A` / `Ctrl-E` | vi-insert | Beginning/end of line (emacs compat) |
+
+## Funciones custom
+
+- **`awsp`** — fuzzy-select AWS profile con fzf, exporta `AWS_PROFILE`
+- **`awsp-clear`** — unset `AWS_PROFILE`
+- **`_auto_venv`** — hook `chpwd` que activa/desactiva `.venv/` al moverte entre directorios
+
+## Aliases destacados
+
+```bash
+# Modern CLI
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -lh --icons --grid'
+alias cat='bat --style=plain'
+alias find='fd'
+alias top='btm'
+alias ping='gping'
+
+# Kubernetes
+alias k='kubectl'        # + completion compdef
+alias kctx='kubectx'
+alias kns='kubens'
+alias ks='stern'
+alias k9='k9s'
+
+# Helm
+alias h='helm'
+alias hls='helm list'
+alias hin='helm install'
+alias hup='helm upgrade'
+alias hun='helm uninstall'
+```
+
+(El plugin `OMZP::kubectl` que carga Zinit aporta también `kgp`, `kgs`, `kgn`, `kgd`, `kdp`, `kds`, `kdd`, `kl`, `kx`, `kaf`, `kdf`.)
+
+## Starship — preview
+
+El prompt de dos líneas muestra (de izquierda a derecha):
+`OS · dir · git branch/status · lenguaje detectado · k8s context · gcloud · terraform · docker · cmd_duration` y a la derecha la hora local. El símbolo `❯` queda en la segunda línea para tipeo rápido sin importar el largo del segmento superior.
+
+## Filosofía
+
+- **Velocidad antes que features**: Zinit turbo difiere todo lo no esencial al primer prompt.
+- **CLI moderno sobre alias clásicos**: pero sin romper portabilidad (no aliasear `grep`, `cd`, etc. cuando hay conflicto conocido — por ejemplo `rg` choca con la función shell que define Claude Code).
+- **Auto-activación de venvs sin plugins externos**: un hook nativo `chpwd` de 12 líneas vs una dependencia.
+- **Symlinks sobre copia**: edits al repo se reflejan inmediatamente en home; rollback es `git checkout`.

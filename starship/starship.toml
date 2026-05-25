@@ -1,131 +1,254 @@
-# Aumentar timeout para comandos lentos (SDKMAN)
-command_timeout = 1000
+"$schema" = 'https://starship.rs/config-schema.json'
 
-# Deshabilitar detección de Java (SDKMAN es lento)
-[java]
-disabled = true
+# Two-line prompt: info on top, character below for fast typing
+format = """
+$os\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+$python\
+$nodejs\
+$golang\
+$rust\
+$terraform\
+$kubernetes\
+$gcloud\
+$docker_context\
+$cmd_duration\
+$line_break\
+$character"""
 
-# Paleta de colores Tomorrow Night Bright
-palette = 'tomorrow_night_bright'
+right_format = """$time"""
 
-[palettes.tomorrow_night_bright]
-foreground = "#eaeaea"
-background = "#000000"
-red = "#d54e53"
-orange = "#e78c45"
-yellow = "#e7c547"
-green = "#b9ca4a"
-aqua = "#70c0b1"
-blue = "#7aa6da"
-purple = "#c397d8"
-comment = "#969896"
+add_newline = true
 
-# Aplicar colores Tomorrow Night Bright
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
 
-[directory]
+[os]
+disabled = false
+format = "[$symbol]($style) "
 style = "bold blue"
-read_only = " 󰌾"
-
-[git_branch]
-style = "bold purple"
-symbol = "⎇ "
-
-[git_status]
-style = "bold red"
 
 [username]
-style_user = "bold yellow"
-style_root = "bold red"
+show_always = false
+style_user = "yellow bold"
+style_root = "red bold"
+format = "[$user]($style) "
 
 [hostname]
-style = "bold aqua"
-ssh_symbol = " "
+ssh_symbol = " "
+ssh_only = true
+format = "on [$hostname]($style) "
+style = "bold green"
 
-[cmd_duration]
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+truncate_to_repo = true
+style = "bold cyan"
+format = "[$path]($style)[$read_only]($read_only_style) "
+read_only_style = "red"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = " "
+format = "on [$symbol$branch]($style) "
+style = "bold purple"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold red"
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+up_to_date = ""
+untracked = "?${count}"
+stashed = "$"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "bold yellow"
 
-# Deshabilitar batería
-[battery]
-disabled = true
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration]($style) "
+style = "yellow"
 
-# Símbolos personalizados
-[aws]
-symbol = "☁ "
+[time]
+disabled = false
+format = "[$time]($style)"
+style = "bold dimmed white"
+time_format = "%H:%M"
 
-[buf]
-symbol = " "
-
-[bun]
-symbol = " "
-
-[c]
-symbol = " "
-
-[cpp]
-symbol = " "
-
-[cmake]
-symbol = " "
-
-[conda]
-symbol = " "
-
-[crystal]
-symbol = " "
-
-[dart]
-symbol = " "
-
-[deno]
-symbol = " "
-
-[docker_context]
-symbol = " "
-
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
-
-[fennel]
-symbol = " "
-
-[fossil_branch]
-symbol = " "
+[kubernetes]
+symbol = "󱃾 "
+disabled = false
+format = 'on [$symbol$context( \($namespace\))]($style) '
+style = "bold blue"
+detect_files = ['k8s', 'kustomization.yaml', 'Chart.yaml']
+detect_folders = ['k8s', 'helm']
 
 [gcloud]
-symbol = "  "
+symbol = "󱇶 "
+format = 'on [$symbol$account@$project]($style) '
+style = "bold yellow"
+disabled = false
 
-[git_commit]
-tag_symbol = '  '
+[python]
+symbol = " "
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+style = "bold yellow"
+
+[nodejs]
+symbol = " "
+format = "via [$symbol($version )]($style)"
+style = "bold green"
 
 [golang]
-symbol = " "
+symbol = " "
+format = "via [$symbol($version )]($style)"
+style = "bold cyan"
+
+[rust]
+symbol = "󱘗 "
+format = "via [$symbol($version )]($style)"
+style = "bold red"
+
+[terraform]
+symbol = " "
+format = "via [$symbol$workspace]($style) "
+style = "bold 105"
+
+[docker_context]
+symbol = " "
+format = "via [$symbol$context]($style) "
+style = "blue bold"
+only_with_files = true
+
+[aws]
+symbol = " "
+
+[azure]
+symbol = " "
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰂑 "
+empty_symbol = "󰂎 "
+
+[buf]
+symbol = " "
+
+[bun]
+symbol = " "
+
+[c]
+symbol = " "
+
+[cpp]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[cobol]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[container]
+symbol = " "
+
+[crystal]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[deno]
+symbol = " "
+
+[direnv]
+symbol = " "
+
+[dotnet]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[erlang]
+symbol = " "
+
+[fennel]
+symbol = " "
+
+[fortran]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[gleam]
+symbol = " "
+
+[git_commit]
+tag_symbol = '  '
+
+[gradle]
+symbol = " "
 
 [guix_shell]
-symbol = " "
+symbol = " "
 
 [haskell]
-symbol = " "
+symbol = " "
 
 [haxe]
-symbol = " "
+symbol = " "
+
+[helm]
+symbol = " "
 
 [hg_branch]
-symbol = " "
+symbol = " "
+
+[java]
+symbol = " "
 
 [julia]
-symbol = " "
+symbol = " "
 
 [kotlin]
-symbol = " "
+symbol = " "
 
 [lua]
-symbol = " "
+symbol = " "
+
+[maven]
+symbol = " "
 
 [memory_usage]
 symbol = "󰍛 "
@@ -133,114 +256,161 @@ symbol = "󰍛 "
 [meson]
 symbol = "󰔷 "
 
+[mojo]
+symbol = "󰈸 "
+
+[nats]
+symbol = " "
+
+[netns]
+symbol = "󰛳 "
+
 [nim]
-symbol = "󰆥 "
+symbol = " "
 
 [nix_shell]
-symbol = " "
-
-[nodejs]
-symbol = " "
-style = "bold #a8d3ff"
+symbol = " "
 
 [ocaml]
-symbol = " "
+symbol = " "
+
+[odin]
+symbol = "󰟢 "
+
+[opa]
+symbol = " "
+
+[openstack]
+symbol = " "
 
 [os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CachyOS = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
+AIX = " "
+AlmaLinux = " "
+Alpaquita = " "
+Alpine = " "
+ALTLinux = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = " "
+Artix = " "
+Bluefin = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Elementary = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = " "
+Gentoo = " "
 HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-Nobara = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
+Illumos = " "
+InstantOS = " "
+Ios = "󰀷 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = " "
+OpenCloudOS = " "
+openEuler = " "
+openSUSE = " "
+OracleLinux = "󰺡 "
+PikaOS = " "
+Pop = " "
+Raspbian = " "
+Redhat = "󱄛 "
+RedHatEnterprise = "󱄛 "
 Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
+RockyLinux = " "
+Solus = " "
+SUSE = " "
+Ubuntu = " "
+Ultramarine = " "
+Unknown = " "
+Uos = " "
+Void = " "
 Windows = "󰍲 "
+Zorin = " "
 
 [package]
 symbol = "󰏗 "
 
 [perl]
-symbol = " "
+symbol = " "
 
 [php]
-symbol = " "
+symbol = " "
 
 [pijul_channel]
-symbol = " "
+symbol = " "
 
 [pixi]
 symbol = "󰏗 "
 
-[python]
-symbol = " "
+[pulumi]
+symbol = " "
+
+[purescript]
+symbol = " "
+
+[raku]
+symbol = "󱖊 "
+
+[red]
+symbol = "󱍼 "
 
 [rlang]
 symbol = "󰟔 "
 
 [ruby]
-symbol = " "
-
-[rust]
-symbol = "󱘗 "
+symbol = " "
 
 [scala]
-symbol = " "
+symbol = " "
+
+[shlvl]
+symbol = "󰹍 "
+
+[singularity]
+symbol = " "
+
+[solidity]
+symbol = " "
+
+[spack]
+symbol = " "
+
+[status]
+symbol = " "
+
+[sudo]
+symbol = " "
 
 [swift]
-symbol = " "
+symbol = " "
+
+[vlang]
+symbol = " "
+
+[typst]
+symbol = " "
+
+[vagrant]
+symbol = " "
+
+[xmake]
+symbol = " "
 
 [zig]
-symbol = " "
-
-[gradle]
-symbol = " "
-
-[kubernetes]
-symbol = "☸ "
-style = "bold blue"
-disabled = false
-format = '[$symbol$context](bold blue)[ ⊛ $namespace](bold aqua) '
-
-[kubernetes.context_aliases]
-"chocolandiadc-mvp" = "🍫 mvp"
-"arn:aws:eks:*:*:cluster/*" = "eks"
-
-[kubernetes.user_aliases]
-"clusterUser_*" = "k8s-user"
+symbol = " "
