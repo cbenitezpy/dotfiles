@@ -39,6 +39,9 @@ brew install \
   eza bat fd ripgrep bottom gping \
   neovim uv \
   awscli kubectl helm
+
+# Nerd Font usado en iTerm2 (JetBrainsMono parcheada con iconos)
+brew install --cask font-jetbrains-mono-nerd-font
 ```
 
 Plus:
@@ -62,6 +65,12 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
    ```bash
    cp ~/.dotfiles/claude/mcp.json.template ~/.claude/mcp.json
    ```
+5. **iTerm2** — apuntar prefs al dotfiles folder:
+   - Abrir iTerm2 → `Settings` → `General` → `Preferences`
+   - Marcar **"Load preferences from a custom folder or URL"** → `~/.dotfiles/iterm2/`
+   - Cuando pregunte: **"Use settings from folder"** (no copiar).
+   - Marcar **"Save changes to folder when iTerm2 quits"** para que los cambios queden versionados.
+   - En `Settings` → `Profiles` → `Text`, verificar que la fuente sea **JetBrainsMono Nerd Font Mono** (size 13). Si no aparece, reiniciar iTerm2 después del `brew install --cask font-jetbrains-mono-nerd-font`.
 
 ## Contenido del repo
 
@@ -70,6 +79,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 ├── shell/         # .zshrc, .zprofile, .bashrc, ...
 ├── starship/      # starship.toml (2-line prompt + Nerd Font icons)
 ├── nvim/          # LazyVim config (init.lua + lua/ + lazy-lock.json)
+├── iterm2/        # com.googlecode.iterm2.plist (Load via custom folder)
 ├── git/           # .gitconfig, .gitignore_global
 ├── tmux/          # .tmux.conf
 ├── atuin/         # config.toml (history sync)
