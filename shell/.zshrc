@@ -223,8 +223,9 @@ alias top='btm'
 alias ping='gping'
 alias find='fd'
 
-# Claude Code (local install)
-alias claude="$HOME/.claude/local/claude"
+# Claude Code: only alias to the local install if it actually exists;
+# otherwise let the binary be found via PATH (brew, npm, etc.)
+[ -x "$HOME/.claude/local/claude" ] && alias claude="$HOME/.claude/local/claude"
 
 # ============================================================
 # iTerm2 shell integration
