@@ -29,6 +29,8 @@ LINKS = {
     "gh/config.yml": ".config/gh/config.yml",
     # Atuin
     "atuin/config.toml": ".config/atuin/config.toml",
+    # sesh (tmux session manager)
+    "sesh/sesh.toml": ".config/sesh/sesh.toml",
     # Zed editor
     "zed/settings.json": ".config/zed/settings.json",
     # Neovim (whole directory symlink — LazyVim config)

@@ -17,6 +17,9 @@ brew "ripgrep"     # grep
 brew "bottom"      # top (btm)
 brew "gping"       # ping with graph
 
+# --- tmux / sessions ---
+brew "sesh"        # smart tmux session manager (fzf + zoxide)
+
 # --- Editor ---
 brew "neovim"
 
