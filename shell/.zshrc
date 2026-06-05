@@ -16,7 +16,10 @@ export _ZO_DOCTOR=0   # zinit's deferred plugins confuse zoxide's doctor heurist
 # --- PATH ---
 export PATH="/opt/homebrew/bin:$HOME/.cargo/bin:$HOME/.antigravity/antigravity/bin:$PATH"
 
-# --- Load private env vars ---
+# --- Load private env vars (sops + age encrypted) ---
+# Carga secrets cifrados; ver secrets/README.md. Falla elegante si falta la clave.
+[[ -f "$HOME/.dotfiles/shell/secrets.zsh" ]] && source "$HOME/.dotfiles/shell/secrets.zsh"
+# Transicional: ~/.env en texto plano. Una vez migrado a sops, borralo y quita esta linea.
 [[ -f ~/.env ]] && source ~/.env
 [[ -f "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
 

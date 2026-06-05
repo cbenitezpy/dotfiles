@@ -13,3 +13,5 @@ target
 Fabric
 *.class
 .env
+
+**/.claude/settings.local.json

@@ -23,6 +23,10 @@ brew "neovim"
 # --- Python tooling ---
 brew "uv"
 
+# --- Secrets (sops + age encrypted env) ---
+brew "sops"        # encrypted secrets management
+brew "age"         # modern encryption backend for sops
+
 # --- Cloud / Infra ---
 brew "awscli"
 brew "kubectl"
