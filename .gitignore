@@ -26,3 +26,26 @@ Thumbs.db
 # Local overrides
 *.local
 *.local.*mcp.json
+
+# ============================================================
+# sops-encrypted secrets (age)
+# ------------------------------------------------------------
+# La carpeta secrets/ queda atrapada por *secrets* / *.env de arriba.
+# La re-incluimos pero con una whitelist ESTRICTA: solo se versionan
+# los archivos cifrados + meta. Cualquier otra cosa dentro de secrets/
+# (texto plano, descifrados temporales, claves) sigue ignorada.
+# Validado con `git check-ignore`.
+!secrets/
+secrets/*
+!secrets/.sops.yaml
+!secrets/vars.sops.env
+!secrets/env.example
+!secrets/manage.sh
+!secrets/README.md
+
+# El loader del shell también cae en *secrets* por su nombre; re-incluirlo.
+!shell/secrets.zsh
+
+# La clave PRIVADA age NUNCA va al repo (vive en ~/.config/sops/age/).
+*.agekey
+**/keys.txt
