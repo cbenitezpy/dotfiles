@@ -13,6 +13,9 @@ export EDITOR='nvim'
 export VISUAL='nvim'
 export _ZO_DOCTOR=0   # zinit's deferred plugins confuse zoxide's doctor heuristic
 
+# --- zsh options ---
+setopt interactive_comments   # permite '#' como comentario al pegar comandos
+
 # --- PATH ---
 export PATH="/opt/homebrew/bin:$HOME/.cargo/bin:$HOME/.antigravity/antigravity/bin:$PATH"
 
