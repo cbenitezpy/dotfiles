@@ -1,0 +1,16 @@
+# sesh — smart tmux session manager (https://github.com/joshmedeski/sesh)
+# sesh ya lista automáticamente: sesiones tmux activas + directorios de zoxide.
+# Acá solo definimos sesiones "fijas" con nombre/icono y comando de arranque.
+# Recargá tmux tras editar: prefix + r
+
+[default_session]
+startup_command = "ls -lh"
+
+[[session]]
+name = "dotfiles ⚙️"
+path = "~/.dotfiles"
+startup_command = "git status -sb"
+
+[[session]]
+name = "chocolandia ☸️"
+path = "~/chocolandia_kube"

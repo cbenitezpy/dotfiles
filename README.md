@@ -11,6 +11,7 @@ Configuración personal de terminal para macOS — orientada a SRE, Kubernetes, 
 | Prompt | **Starship** con prompt de dos líneas y módulos contextuales |
 | History | **Atuin** (Ctrl-F búsqueda global, Ctrl-G por directorio) |
 | Dir nav | **Zoxide** (`z`, `zi`) |
+| Sesiones tmux | **sesh** — popup fuzzy `prefix + T` (tmux + zoxide + configs) |
 | Completions | **Carapace** (universal) + `OMZP::kubectl` |
 | Editor | **Neovim** + **LazyVim** (python / yaml / helm / terraform / docker / markdown) |
 | Python | **uv** + auto-activación de `.venv` vía hook `chpwd` |
