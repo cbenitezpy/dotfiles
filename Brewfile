@@ -20,6 +20,10 @@ brew "gping"       # ping with graph
 # --- tmux / sessions ---
 brew "sesh"        # smart tmux session manager (fzf + zoxide)
 
+# --- Git ---
+brew "lazygit"     # git TUI
+brew "git-delta"   # syntax-highlighted git pager (delta)
+
 # --- Editor ---
 brew "neovim"
 

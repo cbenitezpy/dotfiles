@@ -1,0 +1,9 @@
+# lazygit — https://github.com/jesseduffield/lazygit
+# Doc de config: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+gui:
+  nerdFontsVersion: "3"   # tenés JetBrainsMono Nerd Font
+  showFileTree: true
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never   # usa delta para los diffs dentro de lazygit
