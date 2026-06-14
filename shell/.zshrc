@@ -246,3 +246,9 @@ eval "$(zoxide init zsh)"
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && \
   builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+# Created by `pipx` on 2026-06-13 21:23:58
+export PATH="$PATH:/Users/cbenitez/.local/bin"
+
+# headroom proxy (Docker container 'headroom' on :8787)
+alias cc='ANTHROPIC_BASE_URL=http://localhost:8787 claude'
