@@ -14,6 +14,7 @@ Configuración personal de terminal para macOS — orientada a SRE, Kubernetes, 
 | Sesiones tmux | **sesh** — popup fuzzy `prefix + T` (tmux + zoxide + configs) |
 | Completions | **Carapace** (universal) + `OMZP::kubectl` |
 | Editor | **Neovim** + **LazyVim** (python / yaml / helm / terraform / docker / markdown) |
+| Git | **lazygit** (TUI, alias `lg`) + **delta** (pager con syntax highlight) |
 | Python | **uv** + auto-activación de `.venv` vía hook `chpwd` |
 | Files | `eza` (ls), `bat` (cat), `fd` (find), `rg` (grep) |
 | System | `btm` (top), `gping` (ping), `fzf` (search) |
