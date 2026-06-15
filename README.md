@@ -16,6 +16,7 @@ Configuración personal de terminal para macOS — orientada a SRE, Kubernetes, 
 | Editor | **Neovim** + **LazyVim** (python / yaml / helm / terraform / docker / markdown) |
 | Git | **lazygit** (TUI, alias `lg`) + **delta** (pager con syntax highlight) |
 | Python | **uv** + auto-activación de `.venv` vía hook `chpwd` |
+| Env por dir | **direnv** (`.envrc`) para vars por proyecto; complementa a `_auto_venv` |
 | Files | `eza` (ls), `bat` (cat), `fd` (find), `rg` (grep) |
 | System | `btm` (top), `gping` (ping), `fzf` (search) |
 | Kubernetes | `kubectl` + alias `k`, `kctx`, `kns`, `ks` (stern), `k9` (k9s) |

@@ -33,6 +33,8 @@ LINKS = {
     "sesh/sesh.toml": ".config/sesh/sesh.toml",
     # lazygit (git TUI)
     "lazygit/config.yml": ".config/lazygit/config.yml",
+    # direnv (per-directory env)
+    "direnv/direnv.toml": ".config/direnv/direnv.toml",
     # Zed editor
     "zed/settings.json": ".config/zed/settings.json",
     # Neovim (whole directory symlink — LazyVim config)

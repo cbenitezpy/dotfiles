@@ -1,0 +1,8 @@
+# direnv — https://direnv.net
+# Config global. Por proyecto se usa un archivo .envrc (hay que aprobarlo
+# una vez con `direnv allow`).
+[global]
+# No volcar el diff de variables en cada carga: menos ruido en el prompt.
+hide_env_diff = true
+# Avisar si un .envrc tarda más de esto en cargar.
+warn_timeout = "10s"
