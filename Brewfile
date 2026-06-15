@@ -8,6 +8,7 @@ brew "zoxide"
 brew "atuin"
 brew "carapace"
 brew "fzf"
+brew "direnv"      # per-directory env vars (.envrc)
 
 # --- Modern CLI replacements ---
 brew "eza"         # ls

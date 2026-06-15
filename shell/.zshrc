@@ -242,6 +242,9 @@ alias find='fd'
 # ============================================================
 eval "$(zoxide init zsh)"
 
+# --- direnv (per-directory env vars; complementa a _auto_venv) ---
+eval "$(direnv hook zsh)"
+
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && \
   builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
