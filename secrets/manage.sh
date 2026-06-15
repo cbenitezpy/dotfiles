@@ -85,7 +85,7 @@ cmd_migrate() {
   # la salida ya es ciphertext, nunca queda texto plano dentro del repo.
   sops --encrypt --age "$pub" --input-type dotenv --output-type dotenv "$src" > "$enc"
   echo "Cifrado: $src -> $enc"
-  echo "Verificá con:  $0 show $(basename "$enc")"
+  echo "Verificá con:  $0 show ${2:-$DEFAULT_ENC}"
   echo "Cuando confirmes, borrá el plano:  rm $src"
 }
 
