@@ -87,7 +87,9 @@ zinit wait lucid light-mode for \
 zinit wait lucid for OMZP::kubectl
 
 if command -v carapace &>/dev/null; then
-  export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+  # Bridges solo a shells instaladas (fish/inshellisense no están en esta máquina).
+  # Para sumarlos en otra máquina: agregalos acá si los instalás.
+  export CARAPACE_BRIDGES='zsh,bash'
   export CARAPACE_LENIENT=false
   zinit wait'1' lucid as'null' atload'source <(carapace _carapace)' for \
     zdharma-continuum/null
