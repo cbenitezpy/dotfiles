@@ -260,3 +260,23 @@ export PATH="$PATH:/Users/cbenitez/.local/bin"
 
 # headroom proxy (Docker container 'headroom' on :8787)
 alias cc='ANTHROPIC_BASE_URL=http://localhost:8787 claude'
+
+# headroom: resumen de tokens/dolares ahorrados
+headroom-savings() {
+  local json
+  json=$(curl -s --max-time 5 http://localhost:8787/stats) || { echo "❌ headroom no responde en :8787"; return 1; }
+  echo "$json" | jq -r '
+    "🏆 LIFETIME (\(.persistent_savings.lifetime.requests) requests)",
+    "   Tokens ahorrados (compresión): \(.persistent_savings.lifetime.tokens_saved)",
+    "   Ahorro $ compresión:           $\(.persistent_savings.lifetime.compression_savings_usd | .*100 | round / 100)",
+    "   Input tokens procesados:       \(.persistent_savings.lifetime.total_input_tokens)",
+    "",
+    "📊 SESIÓN ACTUAL (\(.summary.api_requests) requests, \(.summary.primary_model))",
+    "   Tokens removidos:    \(.summary.compression.total_tokens_removed)",
+    "   Compresión promedio: \(.summary.compression.avg_compression_pct)%  (mejor \(.summary.compression.best_compression_pct)%)",
+    "   Ahorro $ compresión: $\(.summary.cost.breakdown.compression_savings_usd)",
+    "   Ahorro $ caché:      $\(.summary.cost.breakdown.cache_savings_usd)",
+    "   Ahorro $ total:      $\(.summary.cost.total_saved_usd)  (\(.summary.cost.savings_pct)%)"
+  '
+}
+alias hrs='headroom-savings'
