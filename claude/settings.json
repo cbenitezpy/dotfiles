@@ -1,14 +1,23 @@
 {
+  "enabledPlugins": {
+    "obsidian@obsidian-skills": true,
+    "caveman@caveman": true
+  },
   "extraKnownMarketplaces": {
     "obsidian-skills": {
       "source": {
         "source": "github",
         "repo": "kepano/obsidian-skills"
       }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
-  "enabledPlugins": {
-    "obsidian@obsidian-skills": true
-  }
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
 }
