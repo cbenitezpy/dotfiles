@@ -26,6 +26,9 @@ mkdir -p "$VAULT"
 # Solo archivos .md. Espejo: --delete borra del destino lo que ya no está en
 # origen, pero --include/--exclude limitan el alcance a .md (no toca otras notas
 # que tengas en esa carpeta del vault).
-rsync -a --delete --include='*.md' --exclude='*' "$MEM/" "$VAULT/"
+# -rt (no -a): preserva recursión y timestamps, pero NO owner/group/perms —
+# esos (-o/-g) fallan con "Operation not permitted" en destinos tipo iCloud y,
+# con set -e, abortarían el agente.
+rsync -rt --delete --include='*.md' --exclude='*' "$MEM/" "$VAULT/"
 
 echo "[sync-claude-memory] ok $(date '+%Y-%m-%d %H:%M:%S') :: $MEM -> $VAULT"
