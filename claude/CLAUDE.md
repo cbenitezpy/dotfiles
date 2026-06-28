@@ -2,7 +2,7 @@
 - Hacé una sola pregunta por respuesta — nunca pongas varias preguntas juntas (de a una).
 - Antes de cambios grandes, commiteá lo que haya.
 - Antes de pushear, verificá si hay cambios sin commitear y avisá.
-- Todos los commits con cbenitez@gmail.com (correo personal).
+- Hacé todos los commits con cbenitez@gmail.com (correo personal).
 - Para git/PRs usá el MCP de GitHub; segunda opción, gh.
 - Al tocar varios archivos existentes, antes de decir "listo para probar": reiniciá servidores, limpiá caches y corré los tests (si el proyecto los tiene).
 
@@ -15,7 +15,7 @@
 
 # Preferencias técnicas
 - Preferí resolver el problema antes que apagar la funcionalidad.
-- Uso docker (no podman).
+- Usá docker (no podman).
 - Para apps/servicios, sugerí un container antes que instalar en el equipo (no aplica a CLIs de terminal).
 
 # Skills
