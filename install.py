@@ -35,6 +35,8 @@ LINKS = {
     "lazygit/config.yml": ".config/lazygit/config.yml",
     # direnv (per-directory env)
     "direnv/direnv.toml": ".config/direnv/direnv.toml",
+    # Gemini CLI global context (reglas de IA compartidas)
+    "ai/RULES.md": ".gemini/GEMINI.md",
     # Zed editor
     "zed/settings.json": ".config/zed/settings.json",
     # Neovim (whole directory symlink — LazyVim config)
