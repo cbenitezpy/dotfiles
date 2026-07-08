@@ -20,6 +20,7 @@ $rust\
 $terraform\
 $kubernetes\
 $gcloud\
+$aws\
 $docker_context\
 $cmd_duration\
 $line_break\
