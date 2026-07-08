@@ -35,8 +35,9 @@ LINKS = {
     "lazygit/config.yml": ".config/lazygit/config.yml",
     # direnv (per-directory env)
     "direnv/direnv.toml": ".config/direnv/direnv.toml",
-    # Gemini CLI global context (reglas de IA compartidas)
-    "ai/RULES.md": ".gemini/GEMINI.md",
+    # Reglas de IA compartidas — global para Gemini CLI y Copilot CLI.
+    # (un origen puede apuntar a varios destinos vía lista)
+    "ai/RULES.md": [".gemini/GEMINI.md", ".copilot/copilot-instructions.md"],
     # Zed editor
     "zed/settings.json": ".config/zed/settings.json",
     # Neovim (whole directory symlink — LazyVim config)
@@ -55,29 +56,35 @@ LINKS = {
 def install():
     print("Installing dotfiles via symlinks...")
 
-    for source_rel, target_rel in LINKS.items():
+    for source_rel, target_rels in LINKS.items():
         source = DOTFILES / source_rel
-        target = HOME / target_rel
 
         if not source.exists():
             print(f"   skip (missing): {source_rel}")
             continue
 
-        # Ensure parent dir exists
-        target.parent.mkdir(parents=True, exist_ok=True)
+        # A source maps to one target (str) or several (list).
+        if isinstance(target_rels, str):
+            target_rels = [target_rels]
 
-        # Backup existing real file/dir (only if not already a symlink)
-        if target.exists() and not target.is_symlink():
-            backup = target.parent / f"{target.name}.pre-dotfiles"
-            target.rename(backup)
-            print(f"   backup: {target_rel} -> {backup.name}")
+        for target_rel in target_rels:
+            target = HOME / target_rel
 
-        # Remove existing symlink to refresh
-        if target.is_symlink():
-            target.unlink()
+            # Ensure parent dir exists
+            target.parent.mkdir(parents=True, exist_ok=True)
 
-        target.symlink_to(source)
-        print(f"   linked: {target_rel} -> {source}")
+            # Backup existing real file/dir (only if not already a symlink)
+            if target.exists() and not target.is_symlink():
+                backup = target.parent / f"{target.name}.pre-dotfiles"
+                target.rename(backup)
+                print(f"   backup: {target_rel} -> {backup.name}")
+
+            # Remove existing symlink to refresh
+            if target.is_symlink():
+                target.unlink()
+
+            target.symlink_to(source)
+            print(f"   linked: {target_rel} -> {source}")
 
     print("\nDotfiles installed.")
 

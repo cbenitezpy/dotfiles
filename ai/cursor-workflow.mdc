@@ -23,7 +23,7 @@ alwaysApply: true
 
 ## Git
 - Antes de cambios grandes, commiteá lo que haya. Antes de pushear, avisá si hay cambios sin commitear.
-- Commits con cbenitez@gmail.com. Para PRs, usá `gh`.
+- Commits con cbenitez@gmail.com (correo personal). Para PRs, usá `gh`.
 
 ## Técnico
 - Preferí resolver el problema antes que apagar la funcionalidad.

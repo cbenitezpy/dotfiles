@@ -14,11 +14,13 @@ Se versionan en el repo, así que viajan a cualquier máquina por el mismo sync 
 
 ## GitHub Copilot
 
-Por repo (no hay global limpio). En cada proyecto:
+- **Copilot CLI (global):** `install.py` symlinkea `RULES.md` → `~/.copilot/copilot-instructions.md`.
+  Aplica a todos tus repos con Copilot CLI sin hacer nada más.
+- **Por repo (IDE / repo-wide):** en cada proyecto:
 
-```bash
-mkdir -p .github && cp ~/.dotfiles/ai/RULES.md .github/copilot-instructions.md
-```
+  ```bash
+  mkdir -p .github && cp ~/.dotfiles/ai/RULES.md .github/copilot-instructions.md
+  ```
 
 ## Cursor
 
