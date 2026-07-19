@@ -93,10 +93,31 @@ inalámbrico), `Batt` (nivel de batería).
 El keymap se guarda en la **memoria del teclado**: se configura **una sola vez**
 y viaja con el teclado a cualquier computadora.
 
-Si tu versión del Launcher ofrece exportar/guardar el layout a un archivo,
-guardalo acá como `k0max-keymap.json` y commitealo — es el backup ante un reset.
-En Launcher **v1.4.1** no encontramos esa opción en los menús; si no aparece, la
-receta de arriba **es** la fuente de verdad para reconstruirlo.
+El backup exportado está en **`k0max-keymap.json`**.
+
+> ⚠️ **El export NO incluye las macros.** El JSON solo trae `keymap`, `knob`,
+> `id` y `MD5`. Si reseteás el teclado, hay que **volver a crear la macro a mano**
+> (ver abajo). Por eso la receta de este README sigue siendo la fuente de verdad.
+
+### Contenido de las macros (no está en el JSON)
+
+| Slot | Contenido | Para qué |
+|---|---|---|
+| `MACRO 1` | `Ctrl` + `A`, después `T` | prefijo tmux + popup de sesh |
+
+### Estado verificado del keymap actual
+
+Decodificado del `k0max-keymap.json`:
+
+| Tecla | Keycode |
+|---|---|
+| Knob girar | `KC_VOLD` / `KC_VOLU` |
+| Knob push | `KC_MUTE` |
+| M1 | `KC_F13` → skhd → iTerm |
+| M2 | `KC_F14` → skhd → Zen |
+| M3 | `LGUI(KC_SPC)` → Spotlight |
+| M4 | `KC_MCTL` → Mission Control |
+| M5 | `MACRO 1` → sesh en tmux |
 
 ## Setup de skhd (una vez por máquina)
 
