@@ -1,0 +1,22 @@
+# ============================================================
+# skhd — hotkey daemon (macOS)
+# ------------------------------------------------------------
+# Traduce las teclas F13/F14 que manda el numpad Keychron K0 Max
+# en "abrir/enfocar app". Un teclado solo puede mandar pulsaciones,
+# no lanzar apps: esta es esa capa.
+#
+# Instalación:   brew bundle install   (ya incluye el tap)
+# Arrancar:      skhd --start-service
+#                (pide permiso de Accesibilidad la primera vez)
+# Recargar:      hot-reload automático al guardar este archivo
+# Logs:          /tmp/skhd_$USER.out.log  y  .err.log
+#
+# `open -a` enfoca la app si ya está abierta, o la lanza si no.
+# ============================================================
+
+# F13 → terminal
+f13 : open -a "iTerm"
+
+# F14 → navegador (Zen)
+# (si algún día cambiás de navegador, es solo esta línea)
+f14 : open -a "Zen"
