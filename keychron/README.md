@@ -38,16 +38,41 @@ directas.
 
 ## Exportar / importar el keymap
 
-En el [Keychron Launcher](https://launcher.keychron.com) (Chrome/Edge/Opera):
+> El keymap vive en la **memoria del teclado**, así que esto se hace **una sola
+> vez**, en la máquina donde esté conectado. Después el teclado lleva su config
+> a cualquier computadora.
 
-1. Conectá el numpad **por cable** y dale *Authorize device*.
-2. Para **respaldar**: `Save/Load` → **Save Current Layout** → guardá el `.json`
-   acá como `k0max-keymap.json` y commiteá.
-3. Para **restaurar** (máquina nueva o después de un reset):
-   `Save/Load` → **Load Saved Layout** → elegí `k0max-keymap.json`.
+### Paso 1 — Exportar el keymap actual (hacelo primero)
 
-El keymap vive en la EEPROM del teclado, así que viaja con el teclado: no hace
-falta reconfigurar por máquina. El JSON es el backup y el historial.
+No hace falta configurar nada acá: solo sacar una copia del estado actual.
+
+1. Conectá el numpad **por cable USB** (para configurar, cable — no Bluetooth).
+2. Abrí **<https://launcher.keychron.com>** en **Chrome, Edge u Opera**.
+   (No funciona en Safari ni Zen: necesita WebHID.)
+3. Clic en **Authorize device** / *Connect* → en el diálogo del navegador
+   seleccioná el **K0 Max** → *Connect*.
+4. Buscá la sección de guardar/cargar layout (rotulada **Save + Load**,
+   *Backup* o similar según versión) y usá la opción de **guardar / exportar el
+   layout actual**. Descarga un `.json`.
+5. Guardalo en este repo como `keychron/k0max-keymap.json` y commiteá:
+
+   ```bash
+   cd ~/.dotfiles && git add keychron/k0max-keymap.json
+   git commit -m "chore(keychron): keymap base exportado del K0 Max"
+   git push
+   ```
+
+### Paso 2 — Aplicar el layout personalizado
+
+Con el JSON exportado ya versionado, el keymap con el layout de arriba se
+prepara editando ese archivo (no hace falta remapear tecla por tecla en la UI).
+Después, en el Launcher:
+
+**Save + Load → cargar / importar layout** → elegí el `.json` actualizado.
+
+### Restaurar (reset, teclado nuevo, etc.)
+
+Mismo import del Paso 2 con `k0max-keymap.json`.
 
 ## Setup de skhd (una vez por máquina)
 
