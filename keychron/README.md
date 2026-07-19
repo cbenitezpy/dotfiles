@@ -170,6 +170,18 @@ Causas típicas:
 
 Con el Secure Input liberado: `skhd --restart-service`.
 
+#### Caso especial: Secure Input colgado con un PID muerto
+
+Si el PID que aparece **ya no existe** (`ps -p $pid` no devuelve nada), el estado
+quedó pegado: la app lo activó y terminó sin liberarlo (bug conocido de macOS).
+Ningún programa va a poder leer el teclado global hasta limpiarlo, y **no hay
+comando** para forzarlo.
+
+1. Intento rápido: reabrí la app culpable, enfocá un campo de contraseña, clic
+   afuera, y cerrala con **Cmd+Q** (cierre limpio).
+2. Si sigue: **cerrar sesión y volver a entrar** (menú Apple → Cerrar sesión).
+   No hace falta reiniciar.
+
 ### Agregar skhd a Accesibilidad a mano
 
 skhd es un binario CLI, **no una `.app`**, así que no aparece solo en la lista.
