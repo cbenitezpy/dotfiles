@@ -17,6 +17,6 @@
 # F13 → terminal
 f13 : open -a "iTerm"
 
-# F14 → navegador
-# (si preferís Zen o Safari, cambiá solo esta línea)
-f14 : open -a "Google Chrome"
+# F14 → navegador (Zen)
+# (si algún día cambiás de navegador, es solo esta línea)
+f14 : open -a "Zen"
