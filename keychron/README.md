@@ -25,7 +25,7 @@ Se configura con el **Keychron Launcher** (<https://launcher.keychron.com>) desd
 | **Knob presionar** | Play / Pause | pestaña **Media** |
 | **M1** | Abrir/enfocar **iTerm** | **Special Keys** → `F13` |
 | **M2** | Abrir/enfocar **Zen** | **Special Keys** → `F14` |
-| **M3** | **Spotlight** (Cmd+Space) | **Macro** (ver abajo) |
+| **M3** | **Spotlight** (Cmd+Space) | **Custom** → `Any` → `LGUI(KC_SPC)` |
 | **M4** | **Mission Control** | **Special Keys** → sección *Mac* → `MCtrl` |
 | **M5** | Popup de **sesh** en tmux (`Ctrl-a` `T`) | **Macro** (ver abajo) |
 | Resto | Numpad clásico | sin tocar |
@@ -51,14 +51,42 @@ Se configura con el **Keychron Launcher** (<https://launcher.keychron.com>) desd
    - **Knob**: clic en el knob del mapa → pestaña *Media* → `Volume Up` /
      `Volume Down` según el sentido de giro, y `Play/Pause` para el push.
 
-5. **Macros** (para M3 y M5): andá a **Macro** en el menú izquierdo, definí:
-   - `Macro 0` = `Cmd` + `Space`  → Spotlight
-   - `Macro 1` = `Ctrl` + `A`, después `T` → popup de sesh en tmux
+5. **M3 — Spotlight (NO usar macro):**
+   clic en **M3** → pestaña **Custom** → botón **`Any`** → escribí
+   **`LGUI(KC_SPC)`** → confirmar.
 
-   Después volvé a **Keymap** → clic en **M3** → pestaña *Macro* → `M0`;
-   clic en **M5** → pestaña *Macro* → `M1`.
+   `LGUI` = Cmd, `KC_SPC` = Space. Manda Cmd+Space como una sola tecla.
+
+6. **M5 — macro de tmux** (esta sí es macro, porque son dos pulsaciones
+   seguidas): andá a **Macro** en el menú izquierdo y definí
+   `Macro 0` = `Ctrl` + `A`, después `T`.
+   Después volvé a **Keymap** → clic en **M5** → pestaña *Macro* → `M0`.
 
 > Las macros de tmux solo tienen efecto con iTerm en foco.
+
+## Problemas conocidos
+
+**El grabador de macros solo captura el modificador (ej. queda solo `L win`).**
+Pasa cuando el atajo que intentás grabar ya lo usa macOS: el sistema lo
+intercepta antes de que el Launcher lo vea. Es el caso de `Cmd+Space`
+(Spotlight).
+
+Regla práctica: para **modificador + tecla** (una sola pulsación) usá
+**Custom → `Any`** con el keycode QMK, no el grabador de macros. Ejemplos:
+
+| Querés | Escribí en `Any` |
+|---|---|
+| Cmd + Space | `LGUI(KC_SPC)` |
+| Cmd + Tab | `LGUI(KC_TAB)` |
+| Ctrl + A (prefijo tmux) | `LCTL(KC_A)` |
+
+Las macros dejalas solo para **secuencias** de varias pulsaciones.
+
+## Otras teclas útiles que encontramos
+
+En **Custom**: `MCtl` (Mission Control), `LPad` (Launchpad), `SShot`
+(screenshot), `Siri`, `Task`, `File`, `BTH1/2/3` y `2.4G` (cambiar de canal
+inalámbrico), `Batt` (nivel de batería).
 
 ## Backup del keymap
 
