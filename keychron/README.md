@@ -1,80 +1,78 @@
 # Keychron K0 Max — numpad QMK wireless
 
-Numpad low-profile de 27 teclas + **knob (encoder)** + columna de macros a la
-izquierda. Tri-mode (BT / 2.4G / cable), QMK/VIA.
+Numpad low-profile de 27 teclas + **knob (encoder)** + columna de macros `M1–M5`
+a la izquierda. Tri-mode (BT / 2.4G / cable), QMK/VIA.
 
-Se configura con el **Keychron Launcher** (web app; requiere Chrome/Edge/Opera
-por WebHID). El keymap se exporta/importa como JSON, y ese JSON se versiona acá.
+Se configura con el **Keychron Launcher** (<https://launcher.keychron.com>) desde
+**Chrome, Edge u Opera** (necesita WebHID; no anda en Safari ni Zen).
 
-## Archivos
+## Distribución física
 
-| Archivo | Qué es |
-|---|---|
-| `k0max-keymap.json` | keymap exportado del Launcher (fuente de verdad, importable) |
+```
+[Knob]   Esc    Del    Tab    Backspace
+ M1      N.Lck   ÷      ×      -
+ M2      7       8      9      +
+ M3      4       5      6      |
+ M4      1       2      3     N.Ent
+ M5      0       .             |
+```
 
-## Layout
+## Qué le vamos a poner
 
-| Zona | Función | Keycode / macro |
+| Tecla | Función | Dónde sale en el Launcher |
 |---|---|---|
-| **Knob — girar** | Volumen ± | `KC_VOLU` / `KC_VOLD` |
-| **Knob — push** | Play / Pause | `KC_MPLY` |
-| **Macro 1** | Abrir/enfocar **iTerm** | `KC_F13` → lo traduce skhd |
-| **Macro 2** | Abrir/enfocar **navegador** | `KC_F14` → lo traduce skhd |
-| **Macro 3** | **Spotlight** | `LGUI(KC_SPC)` (Cmd+Space) |
-| **Macro 4** | Popup de **sesh** en tmux | macro: `Ctrl-a` luego `T` |
-| **Base** | Numpad clásico (números, operadores, Enter) | sin cambios |
-| **Capa Fn** | tmux: split `-` / `=`, zoom, cambiar ventana | macros con prefijo `Ctrl-a` |
+| **Knob girar** | Volumen ± | pestaña **Media** |
+| **Knob presionar** | Play / Pause | pestaña **Media** |
+| **M1** | Abrir/enfocar **iTerm** | **Special Keys** → `F13` |
+| **M2** | Abrir/enfocar **Zen** | **Special Keys** → `F14` |
+| **M3** | **Spotlight** (Cmd+Space) | **Macro** (ver abajo) |
+| **M4** | **Mission Control** | **Special Keys** → sección *Mac* → `MCtrl` |
+| **M5** | Popup de **sesh** en tmux (`Ctrl-a` `T`) | **Macro** (ver abajo) |
+| Resto | Numpad clásico | sin tocar |
 
-> Las macros de tmux solo tienen sentido con iTerm en foco.
+`M1` y `M2` mandan `F13`/`F14`, que **skhd** traduce a "abrir la app"
+(ver `../skhd/skhdrc`). `M4` es una tecla **nativa de macOS**: no necesita skhd.
 
-## Por qué hace falta skhd
+## Receta paso a paso
 
-Un teclado solo manda **pulsaciones**, no puede lanzar apps. Por eso las teclas
-de iTerm y navegador mandan `F13`/`F14` (teclas que macOS reconoce y nada más
-usa) y **skhd** las traduce a `open -a`. Ver `../skhd/skhdrc`.
+1. Conectá el numpad **por cable USB**.
+2. Abrí <https://launcher.keychron.com> en **Chrome** → **Connect** → elegí el
+   **K0 Max** en el diálogo del navegador.
+3. Andá a **Keymap** (menú izquierdo). Vas a ver el mapa del teclado arriba y las
+   pestañas `Basic | Media | Macro | Special Keys | Lighting | Custom | Layer`.
+   > Si dice *"the keyboard map cannot be displayed because the browser window is
+   > too small"*, agrandá la ventana del navegador.
+4. Para cada tecla: **clic en la tecla del mapa** → **clic en la pestaña** que
+   corresponda → **clic en el keycode**. Se aplica al instante (no hay "guardar").
 
-Spotlight, el knob y las macros de tmux **no** necesitan skhd: son pulsaciones
-directas.
+   - **M1** → pestaña *Special Keys* → `F13`
+   - **M2** → pestaña *Special Keys* → `F14`
+   - **M4** → pestaña *Special Keys*, sección **Mac** → `MCtrl`
+   - **Knob**: clic en el knob del mapa → pestaña *Media* → `Volume Up` /
+     `Volume Down` según el sentido de giro, y `Play/Pause` para el push.
 
-## Exportar / importar el keymap
+5. **Macros** (para M3 y M5): andá a **Macro** en el menú izquierdo, definí:
+   - `Macro 0` = `Cmd` + `Space`  → Spotlight
+   - `Macro 1` = `Ctrl` + `A`, después `T` → popup de sesh en tmux
 
-> El keymap vive en la **memoria del teclado**, así que esto se hace **una sola
-> vez**, en la máquina donde esté conectado. Después el teclado lleva su config
-> a cualquier computadora.
+   Después volvé a **Keymap** → clic en **M3** → pestaña *Macro* → `M0`;
+   clic en **M5** → pestaña *Macro* → `M1`.
 
-### Paso 1 — Exportar el keymap actual (hacelo primero)
+> Las macros de tmux solo tienen efecto con iTerm en foco.
 
-No hace falta configurar nada acá: solo sacar una copia del estado actual.
+## Backup del keymap
 
-1. Conectá el numpad **por cable USB** (para configurar, cable — no Bluetooth).
-2. Abrí **<https://launcher.keychron.com>** en **Chrome, Edge u Opera**.
-   (No funciona en Safari ni Zen: necesita WebHID.)
-3. Clic en **Authorize device** / *Connect* → en el diálogo del navegador
-   seleccioná el **K0 Max** → *Connect*.
-4. Buscá la sección de guardar/cargar layout (rotulada **Save + Load**,
-   *Backup* o similar según versión) y usá la opción de **guardar / exportar el
-   layout actual**. Descarga un `.json`.
-5. Guardalo en este repo como `keychron/k0max-keymap.json` y commiteá:
+El keymap se guarda en la **memoria del teclado**: se configura **una sola vez**
+y viaja con el teclado a cualquier computadora.
 
-   ```bash
-   cd ~/.dotfiles && git add keychron/k0max-keymap.json
-   git commit -m "chore(keychron): keymap base exportado del K0 Max"
-   git push
-   ```
-
-### Paso 2 — Aplicar el layout personalizado
-
-Con el JSON exportado ya versionado, el keymap con el layout de arriba se
-prepara editando ese archivo (no hace falta remapear tecla por tecla en la UI).
-Después, en el Launcher:
-
-**Save + Load → cargar / importar layout** → elegí el `.json` actualizado.
-
-### Restaurar (reset, teclado nuevo, etc.)
-
-Mismo import del Paso 2 con `k0max-keymap.json`.
+Si tu versión del Launcher ofrece exportar/guardar el layout a un archivo,
+guardalo acá como `k0max-keymap.json` y commitealo — es el backup ante un reset.
+En Launcher **v1.4.1** no encontramos esa opción en los menús; si no aparece, la
+receta de arriba **es** la fuente de verdad para reconstruirlo.
 
 ## Setup de skhd (una vez por máquina)
+
+Necesario solo para `M1`/`M2` (abrir iTerm y Zen):
 
 ```bash
 brew trust koekeishiya/formulae   # una vez: Homebrew bloquea taps de terceros
