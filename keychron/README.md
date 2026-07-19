@@ -22,7 +22,7 @@ Se configura con el **Keychron Launcher** (<https://launcher.keychron.com>) desd
 | Tecla | Función | Dónde sale en el Launcher |
 |---|---|---|
 | **Knob girar** | Volumen ± | pestaña **Media** |
-| **Knob presionar** | Play / Pause | pestaña **Media** |
+| **Knob presionar** | Mute (silenciar) | pestaña **Media** — default, se dejó así |
 | **M1** | Abrir/enfocar **iTerm** | **Special Keys** → `F13` |
 | **M2** | Abrir/enfocar **Zen** | **Special Keys** → `F14` |
 | **M3** | **Spotlight** (Cmd+Space) | **Custom** → `Any` → `LGUI(KC_SPC)` |
@@ -93,17 +93,22 @@ inalámbrico), `Batt` (nivel de batería).
 El keymap se guarda en la **memoria del teclado**: se configura **una sola vez**
 y viaja con el teclado a cualquier computadora.
 
-El backup exportado está en **`k0max-keymap.json`**.
+El backup son **dos archivos** (el Launcher los exporta por separado):
 
-> ⚠️ **El export NO incluye las macros.** El JSON solo trae `keymap`, `knob`,
-> `id` y `MD5`. Si reseteás el teclado, hay que **volver a crear la macro a mano**
-> (ver abajo). Por eso la receta de este README sigue siendo la fuente de verdad.
+| Archivo | Contiene |
+|---|---|
+| `k0max-keymap.json` | keymap de las 4 capas + knob |
+| `k0max-macros.json` | definición de las macros |
 
-### Contenido de las macros (no está en el JSON)
+> ⚠️ Importante: **el keymap NO incluye las macros**. Si restaurás solo el
+> keymap, `M5` va a apuntar a `MACRO 1` pero la macro estará vacía. Restaurá
+> **ambos** archivos.
 
-| Slot | Contenido | Para qué |
-|---|---|---|
-| `MACRO 1` | `Ctrl` + `A`, después `T` | prefijo tmux + popup de sesh |
+### Contenido de las macros
+
+| Slot | Nombre | Secuencia | Para qué |
+|---|---|---|---|
+| `MACRO 1` | `tmux` | `Ctrl↓ A↓ A↑ Ctrl↑ T↓ T↑` | prefijo tmux (`Ctrl-a`) + `T` = popup de sesh |
 
 ### Estado verificado del keymap actual
 
