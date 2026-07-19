@@ -139,3 +139,42 @@ Sin el `brew trust`, `brew bundle` falla con
 *"Refusing to load formula ... from untrusted tap"*.
 
 Si tras conceder el permiso no responde: `skhd --restart-service`.
+
+### skhd no arranca y nunca pide permiso de Accesibilidad
+
+Revisá el log primero:
+
+```bash
+tail -5 /tmp/skhd_$USER.err.log
+```
+
+Si dice **`secure keyboard entry is enabled by (PID) 'app'! abort..`**, el
+problema **no es Accesibilidad**: macOS tiene activo *Secure Keyboard Entry* y
+skhd se niega a arrancar (por eso nunca llega a pedir el permiso).
+
+Quién lo tiene activo:
+
+```bash
+pid=$(ioreg -l -w 0 | grep -o 'kCGSSessionSecureInputPID"=[0-9]*' | grep -o '[0-9]*$' | head -1)
+ps -p $pid -o pid=,args=
+```
+
+Causas típicas:
+
+- **Un campo de contraseña con foco** en un navegador (Zen/Firefox/Chrome) o en
+  cualquier app. Es transitorio: hacé clic fuera y se libera.
+- **iTerm2 con el toggle fijo**: menú *iTerm2* → **Secure Keyboard Entry** debe
+  estar destildado. Verificar con:
+  `defaults read com.googlecode.iterm2 'Secure Input'`
+  (`1` = activado; que no exista = está bien).
+
+Con el Secure Input liberado: `skhd --restart-service`.
+
+### Agregar skhd a Accesibilidad a mano
+
+skhd es un binario CLI, **no una `.app`**, así que no aparece solo en la lista.
+Ajustes del Sistema → Privacidad y Seguridad → **Accesibilidad** → `+` →
+`Cmd+Shift+G` → pegar `/opt/homebrew/bin/skhd` → *Abrir*.
+
+> El binario de Homebrew es un symlink a `Cellar/skhd/<versión>/bin/skhd`, así que
+> tras un `brew upgrade skhd` puede hacer falta volver a autorizarlo.
