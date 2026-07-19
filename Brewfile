@@ -43,5 +43,11 @@ brew "kubectx"     # provides kubectx + kubens
 brew "stern"       # better multi-pod logs
 brew "k9s"
 
+# --- Teclado / hotkeys (Keychron K0 Max) ---
+# OJO en una máquina nueva: Homebrew bloquea taps de terceros. Antes del
+# bundle hay que correr una vez:  brew trust koekeishiya/formulae
+tap "koekeishiya/formulae"
+brew "skhd"        # hotkey daemon: F13/F14 del numpad -> abrir apps
+
 # --- Fonts ---
 cask "font-jetbrains-mono-nerd-font"

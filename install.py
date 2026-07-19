@@ -35,6 +35,8 @@ LINKS = {
     "lazygit/config.yml": ".config/lazygit/config.yml",
     # direnv (per-directory env)
     "direnv/direnv.toml": ".config/direnv/direnv.toml",
+    # skhd (hotkeys: numpad Keychron -> abrir apps)
+    "skhd/skhdrc": ".config/skhd/skhdrc",
     # Reglas de IA compartidas — global para Gemini CLI y Copilot CLI.
     # (un origen puede apuntar a varios destinos vía lista)
     "ai/RULES.md": [".gemini/GEMINI.md", ".copilot/copilot-instructions.md"],
